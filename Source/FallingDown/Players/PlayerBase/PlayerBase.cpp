@@ -5,13 +5,14 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Components/InputComponent.h"
 
 // Sets default values
 APlayerBase::APlayerBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	CapsuleRadius = 100.0f;
+	CapsuleRadius = 60.0f;
 
 	GetCapsuleComponent()->SetCapsuleHalfHeight(CapsuleRadius);
 	GetCapsuleComponent()->SetCapsuleRadius(CapsuleRadius);
@@ -46,5 +47,24 @@ void APlayerBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerBase::MoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerBase::MoveRight);
+
+}
+
+void APlayerBase::MoveForward(float Value)
+{
+	if (Value != 0.0f)
+	{
+		AddMovementInput(GetActorForwardVector(), Value);
+	}
+}
+
+void APlayerBase::MoveRight(float Value)
+{
+	if (Value != 0.0f)
+	{
+		AddMovementInput(GetActorRightVector(), Value);
+	}
 }
 

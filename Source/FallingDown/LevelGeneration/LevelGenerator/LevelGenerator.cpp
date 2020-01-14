@@ -2,12 +2,14 @@
 
 
 #include "LevelGenerator.h"
+#include "Engine/World.h"
+#include "TimerManager.h"
+#include "LevelGeneration/LevelElement/LevelElement.h"
 
 // Sets default values
 ALevelGenerator::ALevelGenerator()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 }
 
@@ -15,13 +17,56 @@ ALevelGenerator::ALevelGenerator()
 void ALevelGenerator::BeginPlay()
 {
 	Super::BeginPlay();
+
+	StartStageGeneration();
 	
 }
 
-// Called every frame
-void ALevelGenerator::Tick(float DeltaTime)
+void ALevelGenerator::StartStageGeneration()
 {
-	Super::Tick(DeltaTime);
-
+	if (LevelStages.Num() != 0)
+	{
+		GetWorld()->GetTimerManager().SetTimer(StageGenerationTimer, this, 
+			&ALevelGenerator::StageGeneration, ElementGenerationRate, true);
+	}
 }
 
+void ALevelGenerator::StageGeneration()
+{
+	StageDuration += ElementGenerationRate;
+	ManageStages();
+}
+
+void ALevelGenerator::ManageStages()
+{
+	if (StageDuration >= LevelStages[CurrentStageIndex].StageDurationInMinutes * 60.0f)
+	{
+		if (CurrentStageIndex < LevelStages.Num())
+		{
+			CurrentStageIndex += 1;
+			StageDuration = 0.0f;
+		}
+		else
+		{
+			CurrentStageIndex = 0;
+		}
+	}
+}
+
+void ALevelGenerator::SpawnElement(int32 ElementIndex)
+{
+	TSubclassOf<ALevelElement> ElementToSpawn = LevelStages[CurrentStageIndex].StageElements[ElementIndex];
+
+	static FVector SpawnLocation = GetActorLocation();
+	FRotator SpawnRotation = GetActorRotation();
+
+	ALevelElement* LevelElement = GetWorld()->SpawnActor<ALevelElement>(ElementToSpawn, SpawnLocation, SpawnRotation);
+
+	// Set new SpawnLocation
+	FVector Origin;
+	FVector BoxExtent;
+
+	LevelElement->GetActorBounds(true, Origin, BoxExtent);
+
+	SpawnLocation += FVector(0.0f, 0.0f, BoxExtent.Z);
+}

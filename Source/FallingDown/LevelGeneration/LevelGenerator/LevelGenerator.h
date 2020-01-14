@@ -6,6 +6,18 @@
 #include "GameFramework/Actor.h"
 #include "LevelGenerator.generated.h"
 
+USTRUCT()
+struct FLevelStage
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere)
+	float StageDurationInMinutes;
+
+	UPROPERTY(EditAnywhere)
+	TArray<TSubclassOf<class ALevelElement>> StageElements;
+};
+
 UCLASS()
 class FALLINGDOWN_API ALevelGenerator : public AActor
 {
@@ -19,8 +31,25 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	UPROPERTY(VisibleAnywhere, Category = "Properties")
+	int32 CurrentStageIndex;
 
+	UPROPERTY(VisibleAnywhere, Category = "Properties")
+	float StageDuration;
+
+	UPROPERTY(EditAnywhere, Category = "Properties")
+	float ElementGenerationRate;
+
+	UPROPERTY(EditAnywhere, Category = "Properties")
+	TArray<FLevelStage> LevelStages;
+
+	FTimerHandle StageGenerationTimer;
+
+	void StartStageGeneration();
+
+	void StageGeneration();
+
+	void ManageStages();
+
+	void SpawnElement(int32 ElementIndex);
 };

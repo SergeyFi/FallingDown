@@ -52,4 +52,6 @@ protected:
 	void ManageStages();
 
 	void SpawnElement(int32 ElementIndex);
+
+	int32 GenerateRandomElementIndex();
 };

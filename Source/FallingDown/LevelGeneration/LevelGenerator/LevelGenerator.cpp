@@ -18,6 +18,8 @@ void ALevelGenerator::BeginPlay()
 {
 	Super::BeginPlay();
 
+	CurrentSpawnLocation = GetActorLocation();
+
 	StartStageGeneration();
 	
 }
@@ -62,10 +64,9 @@ void ALevelGenerator::SpawnElement(int32 ElementIndex)
 	{
 		TSubclassOf<ALevelElement> ElementToSpawn = LevelStages[CurrentStageIndex].StageElements[ElementIndex];
 
-		static FVector SpawnLocation = GetActorLocation();
 		FRotator SpawnRotation = GetActorRotation();
 
-		ALevelElement* LevelElement = GetWorld()->SpawnActor<ALevelElement>(ElementToSpawn, SpawnLocation, SpawnRotation);
+		ALevelElement* LevelElement = GetWorld()->SpawnActor<ALevelElement>(ElementToSpawn, CurrentSpawnLocation, SpawnRotation);
 
 		// Set new SpawnLocation
 		FVector Origin;
@@ -73,7 +74,9 @@ void ALevelGenerator::SpawnElement(int32 ElementIndex)
 
 		LevelElement->GetActorBounds(true, Origin, BoxExtent);
 
-		SpawnLocation -= FVector(0.0f, 0.0f, BoxExtent.Z * 2);
+		CurrentSpawnLocation -= FVector(0.0f, 0.0f, BoxExtent.Z * 2);
+
+		ManageElementQueue(LevelElement);
 	}
 }
 
@@ -82,4 +85,28 @@ int32 ALevelGenerator::GenerateRandomElementIndex()
 	int32 RandomElementIndex = FMath::RandRange(0, LevelStages[CurrentStageIndex].StageElements.Num() - 1);
 
 	return RandomElementIndex;
+}
+
+void ALevelGenerator::ManageElementQueue(ALevelElement* LevelElement)
+{
+	ElementQueue.Enqueue(LevelElement);
+
+	UE_LOG(LogTemp, Warning, TEXT("Add to queue"));
+
+	ElementCountCurrent++;
+
+	if (ElementCountCurrent > ElementMaxCount)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Remove from queue"));
+
+		ALevelElement* FirstElementInQueue;
+
+		ElementQueue.Dequeue(FirstElementInQueue);
+
+		if (FirstElementInQueue != nullptr)
+		{
+			FirstElementInQueue->Destroy();
+			ElementCountCurrent--;
+		}
+	}
 }

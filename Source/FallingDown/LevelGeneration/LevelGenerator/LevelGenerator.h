@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Containers/Queue.h"
 #include "LevelGenerator.generated.h"
 
 USTRUCT()
@@ -41,7 +42,16 @@ protected:
 	float ElementGenerationRate;
 
 	UPROPERTY(EditAnywhere, Category = "Properties")
+	int32 ElementMaxCount;
+
+	UPROPERTY(EditAnywhere, Category = "Properties")
 	TArray<FLevelStage> LevelStages;
+
+	FVector CurrentSpawnLocation;
+
+	TQueue<class ALevelElement*> ElementQueue;
+
+	int32 ElementCountCurrent;
 
 	FTimerHandle StageGenerationTimer;
 
@@ -54,4 +64,6 @@ protected:
 	void SpawnElement(int32 ElementIndex);
 
 	int32 GenerateRandomElementIndex();
+
+	void ManageElementQueue(ALevelElement* LevelElement);
 };

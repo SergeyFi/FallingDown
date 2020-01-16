@@ -18,9 +18,12 @@ void ALevelGenerator::BeginPlay()
 {
 	Super::BeginPlay();
 
-	CurrentSpawnLocation = GetActorLocation();
+	if (Role == ROLE_Authority)
+	{
+		CurrentSpawnLocation = GetActorLocation();
 
-	StartStageGeneration();
+		StartStageGeneration();
+	}
 	
 }
 
@@ -35,10 +38,13 @@ void ALevelGenerator::StartStageGeneration()
 
 void ALevelGenerator::StageGeneration()
 {
-	StageDuration += ElementGenerationRate;
-	ManageStages();
+	if (Role == ROLE_Authority)
+	{
+		StageDuration += ElementGenerationRate;
+		ManageStages();
 
-	SpawnElement(GenerateRandomElementIndex());
+		SpawnElement(GenerateRandomElementIndex());
+	}
 }
 
 void ALevelGenerator::ManageStages()

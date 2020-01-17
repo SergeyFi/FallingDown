@@ -57,6 +57,8 @@ protected:
 
 	TArray<class ALevelElement*> SpawnedElements;
 
+	TArray<AActor*> PlayerActors;
+
 	FTimerHandle StageGenerationTimer;
 
 	void StartStageGeneration();

@@ -114,8 +114,6 @@ void ALevelGenerator::ManageElementsArray()
 
 float ALevelGenerator::FindExtremePlayerLocation(bool Lowest)
 {
-	static TArray<AActor*> PlayerActors;
-
 	float LowestPlayerLocation = 0.0f;
 
 	float HighestPlayerLocation = 0.0f;

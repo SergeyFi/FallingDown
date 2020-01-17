@@ -55,7 +55,7 @@ protected:
 
 	FVector CurrentSpawnLocation;
 
-	TQueue<class ALevelElement*> ElementQueue;
+	TArray<class ALevelElement*> SpawnedElements;
 
 	FTimerHandle StageGenerationTimer;
 
@@ -69,9 +69,9 @@ protected:
 
 	int32 GenerateRandomElementIndex();
 
-	void AddLevelElementToQueue(ALevelElement* LevelElement);
+	void AddLevelElementToElementsArray(ALevelElement* LevelElement);
 
-	void ManageElementQueue();
+	void ManageElementsArray();
 
 	float FindExtremePlayerLocation(bool Lowest);
 };

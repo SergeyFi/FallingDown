@@ -46,6 +46,8 @@ void ALevelGenerator::StageGeneration()
 		ManageStages();
 
 		SpawnElement(GenerateRandomElementIndex());
+
+		ManageElementsArray();
 	}
 }
 
@@ -84,7 +86,7 @@ void ALevelGenerator::SpawnElement(int32 ElementIndex)
 
 		CurrentSpawnLocation -= FVector(0.0f, 0.0f, BoxExtent.Z * 2);
 
-		AddLevelElementToQueue(LevelElement);
+		SpawnedElements.Add(LevelElement);
 	}
 }
 
@@ -95,24 +97,15 @@ int32 ALevelGenerator::GenerateRandomElementIndex()
 	return RandomElementIndex;
 }
 
-void ALevelGenerator::AddLevelElementToQueue(ALevelElement* LevelElement)
+void ALevelGenerator::ManageElementsArray()
 {
-	ElementQueue.Enqueue(LevelElement);
-
-	ManageElementQueue();
-}
-
-void ALevelGenerator::ManageElementQueue()
-{
-	ALevelElement* TailElement;
-
-	ElementQueue.Peek(TailElement);
+	ALevelElement* TailElement = SpawnedElements[0];
 
 	if (TailElement != nullptr)
 	{
 		if (FindExtremePlayerLocation(false) + HighestPointShift < TailElement->GetActorLocation().Z)
 		{
-			ElementQueue.Dequeue(TailElement);
+			SpawnedElements.RemoveAt(0);
 
 			TailElement->Destroy();
 		}

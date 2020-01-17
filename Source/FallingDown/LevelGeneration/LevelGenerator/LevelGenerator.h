@@ -45,13 +45,17 @@ protected:
 	int32 ElementMaxCount;
 
 	UPROPERTY(EditAnywhere, Category = "Properties")
+	float LowestPointShift;
+
+	UPROPERTY(EditAnywhere, Category = "Properties")
+	float HighestPointShift;
+
+	UPROPERTY(EditAnywhere, Category = "Properties")
 	TArray<FLevelStage> LevelStages;
 
 	FVector CurrentSpawnLocation;
 
 	TQueue<class ALevelElement*> ElementQueue;
-
-	int32 ElementCountCurrent;
 
 	FTimerHandle StageGenerationTimer;
 
@@ -65,5 +69,9 @@ protected:
 
 	int32 GenerateRandomElementIndex();
 
-	void ManageElementQueue(ALevelElement* LevelElement);
+	void AddLevelElementToQueue(ALevelElement* LevelElement);
+
+	void ManageElementQueue();
+
+	float FindExtremePlayerLocation(bool Lowest);
 };

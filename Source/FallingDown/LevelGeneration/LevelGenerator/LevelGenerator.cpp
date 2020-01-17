@@ -5,6 +5,8 @@
 #include "Engine/World.h"
 #include "TimerManager.h"
 #include "LevelGeneration/LevelElement/LevelElement.h"
+#include "Players/PlayerBase/PlayerBase.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ALevelGenerator::ALevelGenerator()
@@ -82,7 +84,7 @@ void ALevelGenerator::SpawnElement(int32 ElementIndex)
 
 		CurrentSpawnLocation -= FVector(0.0f, 0.0f, BoxExtent.Z * 2);
 
-		ManageElementQueue(LevelElement);
+		AddLevelElementToQueue(LevelElement);
 	}
 }
 
@@ -93,26 +95,66 @@ int32 ALevelGenerator::GenerateRandomElementIndex()
 	return RandomElementIndex;
 }
 
-void ALevelGenerator::ManageElementQueue(ALevelElement* LevelElement)
+void ALevelGenerator::AddLevelElementToQueue(ALevelElement* LevelElement)
 {
 	ElementQueue.Enqueue(LevelElement);
 
-	UE_LOG(LogTemp, Warning, TEXT("Add to queue"));
+	ManageElementQueue();
+}
 
-	ElementCountCurrent++;
+void ALevelGenerator::ManageElementQueue()
+{
+	ALevelElement* TailElement;
 
-	if (ElementCountCurrent > ElementMaxCount)
+	ElementQueue.Peek(TailElement);
+
+	if (TailElement != nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Remove from queue"));
-
-		ALevelElement* FirstElementInQueue;
-
-		ElementQueue.Dequeue(FirstElementInQueue);
-
-		if (FirstElementInQueue != nullptr)
+		if (FindExtremePlayerLocation(false) + HighestPointShift < TailElement->GetActorLocation().Z)
 		{
-			FirstElementInQueue->Destroy();
-			ElementCountCurrent--;
+			ElementQueue.Dequeue(TailElement);
+
+			TailElement->Destroy();
 		}
+	}
+}
+
+float ALevelGenerator::FindExtremePlayerLocation(bool Lowest)
+{
+	static TArray<AActor*> PlayerActors;
+
+	float LowestPlayerLocation = 0.0f;
+
+	float HighestPlayerLocation = 0.0f;
+
+	if (PlayerActors.Num() == 0)
+	{
+		UGameplayStatics::GetAllActorsOfClass(this, APlayerBase::StaticClass(), PlayerActors);
+	}
+
+	for (AActor* Player : PlayerActors)
+	{
+		if (Player != nullptr)
+		{
+			if (LowestPlayerLocation > Player->GetActorLocation().Z)
+			{
+				LowestPlayerLocation = Player->GetActorLocation().Z;
+				HighestPlayerLocation = Player->GetActorLocation().Z;
+			}
+
+			if (Player->GetActorLocation().Z > HighestPlayerLocation)
+			{
+				HighestPlayerLocation = Player->GetActorLocation().Z;
+			}
+		}
+	}
+
+	if (Lowest)
+	{
+		return LowestPlayerLocation;
+	}
+	else
+	{
+		return HighestPlayerLocation;
 	}
 }

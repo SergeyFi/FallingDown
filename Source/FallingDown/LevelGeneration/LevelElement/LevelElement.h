@@ -15,9 +15,15 @@ public:
 	// Sets default values for this actor's properties
 	ALevelElement();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties")
+	bool bIsRandomRotated;
+
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	void RandomRotation();
 
 public:	
 	// Called every frame

@@ -42,9 +42,6 @@ protected:
 	float ElementGenerationRate;
 
 	UPROPERTY(EditAnywhere, Category = "Properties")
-	int32 ElementMaxCount;
-
-	UPROPERTY(EditAnywhere, Category = "Properties")
 	float LowestPointShift;
 
 	UPROPERTY(EditAnywhere, Category = "Properties")
@@ -61,6 +58,8 @@ protected:
 
 	FTimerHandle StageGenerationTimer;
 
+	bool bSpawnIsLimited;
+
 	void StartStageGeneration();
 
 	void StageGeneration();
@@ -71,9 +70,9 @@ protected:
 
 	int32 GenerateRandomElementIndex();
 
-	void AddLevelElementToElementsArray(ALevelElement* LevelElement);
-
 	void ManageElementsArray();
 
-	float FindExtremePlayerLocation(bool Lowest);
+	float GetExtremePlayerLocation(bool Lowest);
+
+	void SpawnLimiter();
 };

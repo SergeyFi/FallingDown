@@ -48,6 +48,8 @@ void ALevelGenerator::StageGeneration()
 		SpawnElement(GenerateRandomElementIndex());
 
 		ManageElementsArray();
+
+		SpawnLimiter();
 	}
 }
 
@@ -70,23 +72,26 @@ void ALevelGenerator::ManageStages()
 
 void ALevelGenerator::SpawnElement(int32 ElementIndex)
 {
-	if (LevelStages[CurrentStageIndex].StageElements.IsValidIndex(ElementIndex))
+	if (!bSpawnIsLimited)
 	{
-		TSubclassOf<ALevelElement> ElementToSpawn = LevelStages[CurrentStageIndex].StageElements[ElementIndex];
+		if (LevelStages[CurrentStageIndex].StageElements.IsValidIndex(ElementIndex))
+		{
+			TSubclassOf<ALevelElement> ElementToSpawn = LevelStages[CurrentStageIndex].StageElements[ElementIndex];
 
-		FRotator SpawnRotation = GetActorRotation();
+			FRotator SpawnRotation = GetActorRotation();
 
-		ALevelElement* LevelElement = GetWorld()->SpawnActor<ALevelElement>(ElementToSpawn, CurrentSpawnLocation, SpawnRotation);
+			ALevelElement* LevelElement = GetWorld()->SpawnActor<ALevelElement>(ElementToSpawn, CurrentSpawnLocation, SpawnRotation);
 
-		// Set new SpawnLocation
-		FVector Origin;
-		FVector BoxExtent;
+			// Set new SpawnLocation
+			FVector Origin;
+			FVector BoxExtent;
 
-		LevelElement->GetActorBounds(true, Origin, BoxExtent);
+			LevelElement->GetActorBounds(true, Origin, BoxExtent);
 
-		CurrentSpawnLocation -= FVector(0.0f, 0.0f, BoxExtent.Z * 2);
+			CurrentSpawnLocation -= FVector(0.0f, 0.0f, BoxExtent.Z * 2);
 
-		SpawnedElements.Add(LevelElement);
+			SpawnedElements.Add(LevelElement);
+		}
 	}
 }
 
@@ -99,20 +104,23 @@ int32 ALevelGenerator::GenerateRandomElementIndex()
 
 void ALevelGenerator::ManageElementsArray()
 {
-	ALevelElement* TailElement = SpawnedElements[0];
-
-	if (TailElement != nullptr)
+	if (SpawnedElements.Num() > 0)
 	{
-		if (FindExtremePlayerLocation(false) + HighestPointShift < TailElement->GetActorLocation().Z)
-		{
-			SpawnedElements.RemoveAt(0);
+		ALevelElement* TailElement = SpawnedElements[0];
 
-			TailElement->Destroy();
+		if (TailElement != nullptr)
+		{
+			if (GetExtremePlayerLocation(false) + HighestPointShift < TailElement->GetActorLocation().Z)
+			{
+				SpawnedElements.RemoveAt(0);
+
+				TailElement->Destroy();
+			}
 		}
 	}
 }
 
-float ALevelGenerator::FindExtremePlayerLocation(bool Lowest)
+float ALevelGenerator::GetExtremePlayerLocation(bool Lowest)
 {
 	float LowestPlayerLocation = 0.0f;
 
@@ -147,5 +155,17 @@ float ALevelGenerator::FindExtremePlayerLocation(bool Lowest)
 	else
 	{
 		return HighestPlayerLocation;
+	}
+}
+
+void ALevelGenerator::SpawnLimiter()
+{
+	if (GetExtremePlayerLocation(true) - LowestPointShift > CurrentSpawnLocation.Z)
+	{
+		bSpawnIsLimited = true;
+	}
+	else
+	{
+		bSpawnIsLimited = false;
 	}
 }

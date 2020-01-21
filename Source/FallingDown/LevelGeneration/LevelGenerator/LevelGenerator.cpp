@@ -90,6 +90,8 @@ void ALevelGenerator::SpawnElement(int32 ElementIndex)
 
 			CurrentSpawnLocation -= FVector(0.0f, 0.0f, BoxExtent.Z * 2);
 
+			LevelElement->SetActorLocation(CurrentSpawnLocation);
+
 			SpawnedElements.Add(LevelElement);
 		}
 	}

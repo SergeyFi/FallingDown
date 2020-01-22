@@ -3,6 +3,8 @@
 
 #include "ScoreComponent.h"
 #include "GameFramework/Actor.h"
+#include "GameFramework/PlayerController.h"
+#include "GameFramework/Pawn.h"
 
 // Sets default values for this component's properties
 UScoreComponent::UScoreComponent()
@@ -15,16 +17,17 @@ UScoreComponent::UScoreComponent()
 void UScoreComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	OwningPawn = GetOwner();
 }
 
 
 void UScoreComponent::CalculateScore(float DeltaTime)
 {
-	if (OwningPawn != nullptr && GetOwnerRole() == ROLE_Authority)
+	if (Controller != nullptr && Controller->GetPawn() != nullptr)
 	{
-		Score += OwningPawn->GetVelocity().Z / 100.0f * DeltaTime;
+		if (Controller->GetPawn()->GetLocalRole() == ROLE_Authority)
+		{
+			Score += Controller->GetPawn()->GetVelocity().Z / -1000.0f * DeltaTime;
+		}
 	}
 }
 
@@ -42,5 +45,10 @@ void UScoreComponent::AddScore(float ExtraScore)
 	{
 		Score += ExtraScore;
 	}
+}
+
+void UScoreComponent::SetController(class AActor* PlayerController)
+{
+	Controller = Cast<APlayerController>(PlayerController);
 }
 

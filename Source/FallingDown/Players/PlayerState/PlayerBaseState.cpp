@@ -2,4 +2,18 @@
 
 
 #include "PlayerBaseState.h"
+#include "Components/ScoreComponent.h"
+#include "GameFramework/PlayerController.h"
 
+APlayerBaseState::APlayerBaseState()
+{
+	ScoreComponent = CreateDefaultSubobject<UScoreComponent>(TEXT("ScoreComponent"));
+	
+}
+
+void APlayerBaseState::BeginPlay()
+{
+	Super::BeginPlay();
+
+	ScoreComponent->SetController(GetOwner());
+}

@@ -28,6 +28,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	class UCameraComponent* Camera;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class UHealthComponent* HealthComponent;
+
+	UFUNCTION()
+	void OnMeshOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

@@ -21,11 +21,8 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Properties")
 	int32 Health;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Properties")
-	class USphereComponent* SphereComponent;
 
 public:
 

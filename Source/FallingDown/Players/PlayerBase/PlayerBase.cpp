@@ -6,6 +6,9 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
+#include "Components/HealthComponent.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "LevelGeneration/LevelElement/LevelElement.h"
 
 // Sets default values
 APlayerBase::APlayerBase()
@@ -24,8 +27,10 @@ APlayerBase::APlayerBase()
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
-	
 
+	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
+
+	GetMesh()->OnComponentBeginOverlap.AddDynamic(this, &APlayerBase::OnMeshOverlap);
 }
 
 // Called when the game starts or when spawned
@@ -33,6 +38,16 @@ void APlayerBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void APlayerBase::OnMeshOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	ALevelElement* LevelElement = Cast<ALevelElement>(OtherActor);
+
+	if (LevelElement != nullptr)
+	{
+		HealthComponent->RemoveHealth(1);
+	}
 }
 
 // Called every frame

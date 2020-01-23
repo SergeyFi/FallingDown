@@ -10,8 +10,7 @@ UHealthComponent::UHealthComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
 
-	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
-	if (GetOwner() != nullptr) SphereComponent->SetupAttachment(GetOwner()->GetRootComponent());
+	Health = 5;
 }
 
 
@@ -19,7 +18,6 @@ UHealthComponent::UHealthComponent()
 void UHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 void UHealthComponent::AddHealth(int32 Heal)

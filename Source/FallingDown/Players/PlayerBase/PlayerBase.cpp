@@ -9,6 +9,7 @@
 #include "Components/HealthComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "LevelGeneration/LevelElement/LevelElement.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 APlayerBase::APlayerBase()
@@ -17,11 +18,14 @@ APlayerBase::APlayerBase()
 
 	CapsuleRadius = 60.0f;
 
+	GetCharacterMovement()->AirControl = 1.0f;
+
+
 	GetCapsuleComponent()->SetCapsuleHalfHeight(CapsuleRadius);
 	GetCapsuleComponent()->SetCapsuleRadius(CapsuleRadius);
 
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
-	SpringArm->TargetArmLength = 600.0f;
+	SpringArm->TargetArmLength = 0.0f;
 	SpringArm->SetRelativeRotation(FRotator(-90.0f, 0.0f, 0.0f));
 	SpringArm->SetupAttachment(Cast<USceneComponent>(GetCapsuleComponent()));
 

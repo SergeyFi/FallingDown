@@ -41,6 +41,8 @@ void UHealthComponent::RemoveHealth(int32 Damage)
 		if (Health <= 0)
 		{
 			OnHealthEnded.Broadcast();
+
+			Health = 0;
 		}
 	}
 }

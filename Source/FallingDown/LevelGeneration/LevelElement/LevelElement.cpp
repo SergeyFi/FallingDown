@@ -38,14 +38,21 @@ void ALevelElement::RandomRotation()
 
 void ALevelElement::SpawnScoreActor()
 {
-	if (ScoreActorClass != NULL)
-	{
-		FTransform SpawnTransform = GetTransform();
-		SpawnTransform.SetLocation(ScoreActorPosition);
-		SpawnTransform.SetScale3D(FVector(1.0f, 1.0f, 1.0f));
+	int32 Probability = FMath::RandRange(0, 100);
 
-		GetWorld()->SpawnActor<AScoreActor>(ScoreActorClass, SpawnTransform);
+	if (Probability < SpawnProbability)
+	{
+		if (ScoreActorClass != NULL)
+		{
+			FTransform SpawnTransform = GetTransform();
+			SpawnTransform.SetLocation(ScoreActorPosition);
+			SpawnTransform.SetScale3D(FVector(1.0f, 1.0f, 1.0f));
+
+			GetWorld()->SpawnActor<AScoreActor>(ScoreActorClass, SpawnTransform);
+		}
 	}
+
+
 }
 
 // Called every frame

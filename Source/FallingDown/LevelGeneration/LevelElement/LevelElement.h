@@ -18,12 +18,22 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties")
 	bool bIsRandomRotated;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties|Score")
+	int32 SpawnProbability;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties|Score")
+	TSubclassOf<class AScoreActor> ScoreActorClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties|Score", meta = (MakeEditWidget = true))
+	FVector ScoreActorPosition;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	void RandomRotation();
+
+	void SpawnScoreActor();
 
 public:	
 	// Called every frame

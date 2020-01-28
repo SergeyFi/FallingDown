@@ -2,11 +2,13 @@
 
 
 #include "LevelElement.h"
+#include "Engine/World.h"
+#include "Actors/ScoreActor/ScoreActor.h"
 
 // Sets default values
 ALevelElement::ALevelElement()
 {
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 	bReplicates = true;
 
 }
@@ -17,6 +19,8 @@ void ALevelElement::BeginPlay()
 	Super::BeginPlay();
 
 	RandomRotation();
+
+	SpawnScoreActor();
 	
 }
 
@@ -29,6 +33,18 @@ void ALevelElement::RandomRotation()
 			int32 RandomRotation = 90.0f * FMath::RandRange(0, 3);
 			AddActorLocalRotation(FRotator(0.0f, RandomRotation, 0.0f));
 		}
+	}
+}
+
+void ALevelElement::SpawnScoreActor()
+{
+	if (ScoreActorClass != NULL)
+	{
+		FTransform SpawnTransform = GetTransform();
+		SpawnTransform.SetLocation(ScoreActorPosition);
+		SpawnTransform.SetScale3D(FVector(1.0f, 1.0f, 1.0f));
+
+		GetWorld()->SpawnActor<AScoreActor>(ScoreActorClass, SpawnTransform);
 	}
 }
 

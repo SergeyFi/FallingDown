@@ -41,6 +41,8 @@ void AScoreActor::OnSphereOverlapBegin(UPrimitiveComponent* OverlappedComp, AAct
 		if (PlayerState != nullptr)
 		{
 			PlayerState->GetScoreComponent()->AddScore(Score);
+
+			Destroy();
 		}
 	}
 }

@@ -15,6 +15,13 @@ public:
 	// Sets default values for this actor's properties
 	ALevelElement();
 
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UStaticMeshComponent* Mesh;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties")
 	bool bIsRandomRotated;
 
@@ -25,11 +32,7 @@ public:
 	TSubclassOf<class AScoreActor> ScoreActorClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Properties|Score", meta = (MakeEditWidget = true))
-	FVector ScoreActorPosition;
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	class USceneComponent* ScoreActorSpawnPosition;
 
 	void RandomRotation();
 

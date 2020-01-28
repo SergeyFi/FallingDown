@@ -4,6 +4,7 @@
 #include "LevelElement.h"
 #include "Engine/World.h"
 #include "Actors/ScoreActor/ScoreActor.h"
+#include "Components/StaticMeshComponent.h"
 
 // Sets default values
 ALevelElement::ALevelElement()
@@ -11,6 +12,11 @@ ALevelElement::ALevelElement()
 	PrimaryActorTick.bCanEverTick = false;
 	bReplicates = true;
 
+	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RootMesh"));
+	RootComponent = Mesh;
+
+	ScoreActorSpawnPosition = CreateDefaultSubobject<USceneComponent>(TEXT("ScoreActorSpawnPosition"));
+	ScoreActorSpawnPosition->SetupAttachment(Mesh);
 }
 
 // Called when the game starts or when spawned
@@ -45,7 +51,7 @@ void ALevelElement::SpawnScoreActor()
 		if (ScoreActorClass != NULL)
 		{
 			FTransform SpawnTransform = GetTransform();
-			SpawnTransform.SetLocation(ScoreActorPosition);
+			SpawnTransform.SetLocation(ScoreActorSpawnPosition->GetComponentLocation());
 			SpawnTransform.SetScale3D(FVector(1.0f, 1.0f, 1.0f));
 
 			GetWorld()->SpawnActor<AScoreActor>(ScoreActorClass, SpawnTransform);

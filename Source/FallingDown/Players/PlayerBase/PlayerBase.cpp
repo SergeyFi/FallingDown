@@ -19,6 +19,7 @@ APlayerBase::APlayerBase()
 	CapsuleRadius = 60.0f;
 
 	GetCharacterMovement()->AirControl = 1.0f;
+	GetCharacterMovement()->MaxWalkSpeed = 2000.0f;
 
 
 	GetCapsuleComponent()->SetCapsuleHalfHeight(CapsuleRadius);

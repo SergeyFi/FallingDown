@@ -14,6 +14,4 @@ APlayerBaseState::APlayerBaseState()
 void APlayerBaseState::BeginPlay()
 {
 	Super::BeginPlay();
-
-	ScoreComponent->SetController(GetOwner());
 }

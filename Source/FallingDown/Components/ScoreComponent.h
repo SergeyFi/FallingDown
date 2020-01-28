@@ -23,15 +23,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
 	float Score;
 
-	class APlayerController* Controller;
-
-	void CalculateScore(float DeltaTime);
-
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	void AddScore(float ExtraScore);
-
-	void SetController(class AActor* PlayerController);
 };

@@ -21,5 +21,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UScoreComponent* ScoreComponent;
+
+public:
+
+	class UScoreComponent* GetScoreComponent();
 	
 };

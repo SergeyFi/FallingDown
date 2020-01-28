@@ -15,3 +15,8 @@ void APlayerBaseState::BeginPlay()
 {
 	Super::BeginPlay();
 }
+
+UScoreComponent* APlayerBaseState::GetScoreComponent()
+{
+	return ScoreComponent;
+}

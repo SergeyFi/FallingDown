@@ -30,10 +30,13 @@ public:
 
 	void RemoveHealth(int32 Damage);
 
+	UPROPERTY(BlueprintAssignable, Category = "Health component")
 	FHealthDelegate OnHealthEnded;
 
+	UPROPERTY(BlueprintAssignable, Category = "Health component")
 	FHealthDelegate OnDamaged;
 
+	UPROPERTY(BlueprintAssignable, Category = "Health component")
 	FHealthDelegate OnHeal;
 
 };

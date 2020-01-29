@@ -34,6 +34,7 @@ APlayerBase::APlayerBase()
 	Camera->SetupAttachment(SpringArm);
 
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
+	HealthComponent->OnHealthEnded.AddDynamic(this, &APlayerBase::OnHealthEnded);
 
 	GetMesh()->OnComponentBeginOverlap.AddDynamic(this, &APlayerBase::OnMeshOverlap);
 }
@@ -53,6 +54,11 @@ void APlayerBase::OnMeshOverlap(UPrimitiveComponent* OverlappedComp, AActor* Oth
 	{
 		HealthComponent->RemoveHealth(1);
 	}
+}
+
+void APlayerBase::OnHealthEnded()
+{
+	Destroy();
 }
 
 // Called every frame

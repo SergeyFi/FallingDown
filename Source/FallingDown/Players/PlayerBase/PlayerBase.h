@@ -50,4 +50,6 @@ public:
 	UFUNCTION()
 	void MoveRight(float Value);
 
+	class UHealthComponent* GetHealthComponent();
+
 };

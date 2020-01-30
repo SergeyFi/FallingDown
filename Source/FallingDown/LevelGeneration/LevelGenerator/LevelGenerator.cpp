@@ -133,6 +133,8 @@ float ALevelGenerator::GetExtremePlayerLocation(bool Lowest)
 		UGameplayStatics::GetAllActorsOfClass(this, APlayerBase::StaticClass(), PlayerActors);
 	}
 
+	UGameplayStatics::GetAllActorsOfClass(this, APlayerBase::StaticClass(), PlayerActors);
+
 	for (AActor* Player : PlayerActors)
 	{
 		if (Player != nullptr)

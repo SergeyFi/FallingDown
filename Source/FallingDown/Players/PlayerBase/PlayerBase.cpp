@@ -94,3 +94,8 @@ void APlayerBase::MoveRight(float Value)
 	}
 }
 
+UHealthComponent* APlayerBase::GetHealthComponent()
+{
+	return HealthComponent;
+}
+

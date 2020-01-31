@@ -10,6 +10,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "LevelGeneration/LevelElement/LevelElement.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Components/PlayerSoundComponent.h"
 
 // Sets default values
 APlayerBase::APlayerBase()
@@ -35,6 +36,9 @@ APlayerBase::APlayerBase()
 
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
 	HealthComponent->OnHealthEnded.AddDynamic(this, &APlayerBase::OnHealthEnded);
+
+	SoundComponent = CreateDefaultSubobject<UPlayerSoundComponent>(TEXT("SoundComponent"));
+	SoundComponent->SetupAttachment(Camera);
 
 	GetMesh()->OnComponentBeginOverlap.AddDynamic(this, &APlayerBase::OnMeshOverlap);
 }

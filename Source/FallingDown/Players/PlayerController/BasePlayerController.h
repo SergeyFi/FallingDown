@@ -31,4 +31,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG")
 	TSubclassOf<UUserWidget> GameOverUI;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG")
+	class UControllerUIComponent* UIComponent;
+
 };

@@ -5,10 +5,13 @@
 #include "Players/PlayerBase/PlayerBase.h"
 #include "Components/HealthComponent.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/ControllerUIComponent.h"
 
 ABasePlayerController::ABasePlayerController()
 {
 	bReplicates = true;
+
+	UIComponent = CreateDefaultSubobject<UControllerUIComponent>(TEXT("UIComponent"));
 }
 
 void ABasePlayerController::BeginPlay()
@@ -37,8 +40,6 @@ void ABasePlayerController::OnHealthEnded_Implementation()
 			GameOverWidget->AddToViewport();
 			SetInputMode(FInputModeGameAndUI());
 			bShowMouseCursor = true;
-
-			UE_LOG(LogTemp, Warning, TEXT("Your message"));
 		}
 	}
 }

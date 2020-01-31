@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "ScoreComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FScoreDelegate);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class FALLINGDOWN_API UScoreComponent : public UActorComponent
@@ -28,4 +29,7 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	void AddScore(float ExtraScore);
+
+	UPROPERTY(BlueprintAssignable, Category = "Score component")
+	FScoreDelegate OnScoreAdd;
 };

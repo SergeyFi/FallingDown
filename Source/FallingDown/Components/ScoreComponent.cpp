@@ -30,5 +30,6 @@ void UScoreComponent::AddScore(float ExtraScore)
 	if (GetOwnerRole() == ROLE_Authority)
 	{
 		Score += ExtraScore;
+		OnScoreAdd.Broadcast();
 	}
 }

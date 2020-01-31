@@ -36,7 +36,7 @@ void ALevelElement::RandomRotation()
 	{
 		if (bIsRandomRotated)
 		{
-			int32 RandomRotation = 90.0f * FMath::RandRange(0, 3);
+			int32 RandomRotation = FMath::RandRange(0, 360);
 			AddActorLocalRotation(FRotator(0.0f, RandomRotation, 0.0f));
 		}
 	}
